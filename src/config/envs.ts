@@ -5,6 +5,7 @@ interface EnvVars {
   PORT: number;
   NATS_SERVERS: string[];
   DATABASE_URL: string;
+  JWT_SECRET_KEY: string;
 }
 
 const envsSchema = joi
@@ -12,6 +13,7 @@ const envsSchema = joi
     PORT: joi.number().required(),
     NATS_SERVERS: joi.array().items(joi.string()).required(),
     DATABASE_URL: joi.string().required(),
+    JWT_SECRET_KEY: joi.string().required(),
   })
   .unknown(true);
 
@@ -34,4 +36,5 @@ export const envs = {
   db: {
     url: envVars.DATABASE_URL,
   },
+  jwtSecretKey: envVars.JWT_SECRET_KEY,
 };
