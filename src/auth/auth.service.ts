@@ -38,15 +38,11 @@ export class AuthService {
       });
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { _id, password: __, ...restUser } = savedUser.toJSON();
+      const { _id, password: __, __v, ...restUser } = savedUser.toJSON();
 
       return {
         user: restUser,
-        token: await this.signJWT({
-          email: restUser.email,
-          name: restUser.name,
-          id: savedUser.id,
-        }),
+        token: await this.signJWT(restUser),
       };
     } catch (error) {
       throw new RpcException({
@@ -79,16 +75,11 @@ export class AuthService {
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { _id, password: __, ...restUser } = user.toJSON();
+      const { _id, password: __, __v, ...restUser } = user.toJSON();
 
       return {
         user: restUser,
-
-        token: await this.signJWT({
-          email: restUser.email,
-          name: restUser.name,
-          id: user.id,
-        }),
+        token: await this.signJWT(restUser),
       };
     } catch ({ error }) {
       throw new RpcException({
