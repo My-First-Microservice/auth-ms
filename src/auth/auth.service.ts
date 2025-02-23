@@ -89,7 +89,26 @@ export class AuthService {
     }
   }
 
-  signJWT(payload: JwtPayload) {
+  async signJWT(payload: JwtPayload) {
     return this.jwtService.signAsync(payload);
+  }
+
+  async verifyJWT(token: string) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { sub, iat, exp, ...user } =
+        await this.jwtService.verifyAsync(token);
+
+      return {
+        user,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        token: await this.signJWT(user),
+      };
+    } catch {
+      throw new RpcException({
+        status: 401,
+        message: 'Invalid Token',
+      });
+    }
   }
 }
